@@ -4,6 +4,8 @@ import arcade
 WIDTH = 640
 HEIGHT = 480
 
+my_button = [50, 200, 50, 50]  # x, y, width, height
+show_text = False
 
 RECT_WIDTH = 225
 RECT_HEIGHT = 900
@@ -49,14 +51,18 @@ def on_draw():
     scale = .1
     arcade.draw_texture_rectangle(540, 300, scale * texture.width,
                                   scale * texture.height, texture, 0)
-    texture = arcade.load_texture("images/phone.png")
-    scale = .1
-    arcade.draw_texture_rectangle(125, 200, scale * texture.width,
-                                  scale * texture.height, texture, 0)
     texture = arcade.load_texture("images/tilted.png")
     scale = .3
     arcade.draw_texture_rectangle(115, 400, scale * texture.width,
                                   scale * texture.height, texture, 0)
+    arcade.draw_xywh_rectangle_filled(my_button[0],
+                                      my_button[1],
+                                      my_button[2],
+                                      my_button[3],
+                                      arcade.color.WHITE)
+
+    if show_text:
+        arcade.draw_text("If you need help visit KidsHelpPhone", 100, 250, arcade.color.WHITE, 18)
 
 
 def on_key_press(key, modifiers):
@@ -68,7 +74,14 @@ def on_key_release(key, modifiers):
 
 
 def on_mouse_press(x, y, button, modifiers):
-    pass
+    global show_text
+    my_button_x, my_button_y, my_button_w, my_button_h = my_button
+
+    if (x > my_button_x and x < my_button_x + my_button_w and
+            y > my_button_y and y < my_button_y + my_button_h):
+        show_text = True
+    else:
+        show_text = False
 
 
 def setup():
@@ -78,6 +91,7 @@ def setup():
 
     window = arcade.get_window()
     window.on_draw = on_draw
+    window.on_update = on_update
     window.on_key_press = on_key_press
     window.on_key_release = on_key_release
     window.on_mouse_press = on_mouse_press
